@@ -14,7 +14,7 @@ Meteor.methods({
   'stockScrape'({stock, id}) {
       const stockURL = 'https://finviz.com/quote.ashx?t=' + stock;
 
-      let stats = {};
+    
 
       request(stockURL, (error, response, html) => {
         if(!error && response.statusCode == 200) {
@@ -25,7 +25,8 @@ Meteor.methods({
             // ATR
             stringSearcher.find(dataTable,'ATR')
                 .then(function(resultArr){
-                    let fatr = resultArr[0].text.substring(3);
+                    fatr = resultArr[0].text.substring(3);
+                    
                 })
                 stringSearcher.find(dataTable,'Avg Volume')
                 .then(function(resultArr){
@@ -56,15 +57,15 @@ Meteor.methods({
               }
     });
  
-  stats = {
+  /*stats = {
     atr: fatr,
     avol: favol,
     rvol: frvol,
     float: ffloat,
     sfloat: fsfloat,
     inst: finst
-  }
-  console.log(stats);
+  }*/
+  
   //Watchlist.update(id,{ $set: {atr: fatr}});
 
 
