@@ -1,0 +1,30 @@
+{
+  "name": "smb-db",
+  "private": true,
+  "scripts": {
+    "start": "meteor run",
+    "test": "meteor test --once --driver-package meteortesting:mocha",
+    "test-app": "TEST_WATCH=1 meteor test --full-app --driver-package meteortesting:mocha",
+    "visualize": "meteor --production --extra-packages bundle-visualizer"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.11.2",
+    "bulma": "^0.9.1",
+    "cheerio": "^1.0.0-rc.3",
+    "cli-table": "^0.3.1",
+    "jquery": "^3.5.1",
+    "meteor-node-stubs": "^1.0.1",
+    "moment": "^2.29.0",
+    "request": "^2.88.2",
+    "search-string": "^3.1.0",
+    "simpl-schema": "^1.10.1",
+    "string-search": "^1.2.0"
+  },
+  "meteor": {
+    "mainModule": {
+      "client": "client/main.js",
+      "server": "server/main.js"
+    },
+    "testModule": "tests/main.js"
+  }
+}

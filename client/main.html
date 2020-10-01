@@ -1,0 +1,121 @@
+<template name="base">
+  <head>
+    <title>SMB DB</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/uikit.min.css" />
+    
+  </head>
+  
+  <body>
+    {{#if currentUser}}
+    <nav class="uk-navbar-container" uk-navbar="mode: click">
+      <div class="uk-navbar-left">
+  
+          <ul class="uk-navbar-nav">
+              <li class="uk-active"><a href="#">SMBDB</a></li>
+          </ul>
+  
+      </div>
+      <div class="uk-navbar-right">
+  
+        <ul class="uk-navbar-nav">
+            <li><a href="#">Item</a></li>
+            <li>
+              <a href="#">{{name}}</a>
+              <div class="uk-navbar-dropdown">
+                  <ul class="uk-nav uk-navbar-dropdown-nav">
+                      <li class="uk-active"><a href="#">Active</a></li>
+                      <li><a href="#">Item</a></li>
+                      <li><a class="logout uk-text-danger	" href="#">Logout</a></li>
+                  </ul>
+              </div>
+          </li>
+        </ul>
+  
+    </div>
+  </nav>
+    {{>main}}
+  {{else}}
+    <div class="uk-column-1">
+      <img style="width: 100%;" src="/loginbg.jpg" alt="">
+      <div class="uk-position-center">
+        <button class="uk-button uk-button-large uk-button-primary login">LOGIN WITH DISCORD</button>
+    </div>
+      <div class="uk-overlay uk-position-left">SMBDB</div>
+
+  </div>
+  {{/if}}
+  
+  
+    <script src="js/uikit.min.js"></script>
+    <script src="js/uikit-icons.min.js"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
+  </body>
+</template>
+
+
+<template name="main">
+  <div class="uk-container uk-container-large" style="margin-top: 20px">
+    <div class="uk-child-width-expand@s" uk-grid>
+      <div>
+          <div class="uk-card uk-card-default uk-card-body">
+            <h3>Watchlist</h3>
+            <div class="uk-margin">
+              <form class="addstock">
+                <input class="uk-input uk-form-width-medium uk-form-small" id="watchlist_stock" style="width:100%" type="text" placeholder="$STOCK" autofocus>
+              </form>
+              <table class="uk-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>ATR</th>
+                        <th>Avg Vol</th>
+                        <th>R Vol</th>
+                        <th>Float</th>
+                        <th>Short Float</th>
+                        <th>Institutional</th>
+                      </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>AMD</td>
+                        <td>3.66</td>
+                        <td>61.77M</td>
+                        <td>0.82</td>
+                        <td>1.17B</td>
+                        <td>2.79%</td>
+                        <td>73.00%</td>
+                        <td>+</td>
+                      </tr>
+                      {{#each mywatchlist}}
+                      <tr>
+                        <td>{{stock}}</td>
+                        <td>3.66</td>
+                        <td>61.77M</td>
+                        <td>0.82</td>
+                        <td>1.17B</td>
+                        <td>2.79%</td>
+                        <td>73.00%</td>
+                        <td>+</td>
+                      </tr>
+                      {{else}}
+                      <tr>
+                        <td>nothing on</td>
+                        <td> your watchlist</td>
+                        <td>:)</td>
+                      </tr>
+                      {{/each}}
+                </tbody>
+            </table>
+          </div>
+          </div>
+      </div>
+      <div>
+          <div class="uk-card uk-card-default uk-card-body">
+            <h3>Desk Picks</h3>
+            coming soon...
+          </div>
+      </div>
+</div></div>
+</template>
