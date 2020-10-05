@@ -1,77 +1,62 @@
+import { data } from 'jquery';
 import { Meteor } from 'meteor/meteor';
 import '../collections/watchlist';
+import '../collections/deskpicks';
+import '../collections/actionlog';
+import { callbackify } from 'util';
 const cheerio = require('cheerio')
 const Table = require('cli-table');
 const request = require('request');
 const stringSearcher = require('string-search');
 
-
+Meteor.publish('DeskPicks', function () {
+  return DeskPicks.find({});
+});
 Meteor.publish('Watchlist', function () {
-  return Rooms.find({});
+  return Watchlist.find({});
+});
+Meteor.publish('ActionLog', function () {
+  return ActionLog.find({});
 });
 
 Meteor.methods({
   'stockScrape'({stock, id}) {
-      const stockURL = 'https://finviz.com/quote.ashx?t=' + stock;
-
+  
+      const stonkurl = 'https://finviz.com/quote.ashx?t=' + stock;
     
 
-      request(stockURL, (error, response, html) => {
+      const bound = Meteor.bindEnvironment((callback) => {callback();});
+
+      request(stonkurl, (error, response, html) => {
         if(!error && response.statusCode == 200) {
+          bound(() => {
             const $ = cheerio.load(html);
-    
-            const dataTable = $('.snapshot-table2').text();
-            
-            // ATR
-            stringSearcher.find(dataTable,'ATR')
-                .then(function(resultArr){
-                    fatr = resultArr[0].text.substring(3);
-                    
-                })
-                stringSearcher.find(dataTable,'Avg Volume')
-                .then(function(resultArr){
-                    let favol = resultArr[0].text.substring(10);
-  
-                })
-                stringSearcher.find(dataTable,'Rel Volume')
-                .then(function(resultArr){
-                    let frvol = resultArr[0].text.substring(10);
-       
-                })
-                stringSearcher.find(dataTable,'Shs Float')
-                .then(function(resultArr){
-                    let ffloat = resultArr[0].text.substring(9);
-              
-                })
-                stringSearcher.find(dataTable,'Short Float')
-                .then(function(resultArr){
-                    let fsfloat = resultArr[0].text.substring(11);
-                    stats[4] = fsfloat;
-  
-                })
-                stringSearcher.find(dataTable,'Inst Own')
-                .then(function(resultArr){
-                    let finst = resultArr[0].text.substring(8);
-  
-                })
-              }
-    });
- 
-  /*stats = {
-    atr: fatr,
-    avol: favol,
-    rvol: frvol,
-    float: ffloat,
-    sfloat: fsfloat,
-    inst: finst
-  }*/
-  
-  //Watchlist.update(id,{ $set: {atr: fatr}});
 
+            const dataTable = $('.snapshot-table2').text().split('\n');
+        
+            let atr = dataTable[63].substring(3);
+            let institutional = dataTable[21].substring(8);
+            let avgvolume = dataTable[86].substring(10);
+            let shortfloat = dataTable[22].substring(11);
+            let rvol = dataTable[78].substring(10);
+            let float = dataTable[14].substring(9);
 
+            Watchlist.update(id,{ $set: {
+              atr: atr,
+              avgvol: avgvolume,
+              rvol: rvol,
+              float: float,
+              sfloat: shortfloat,
+              instit: institutional
+            }});
+          })
+        } 
+      })
+
+      
   }
 });
 
 Meteor.startup(() => {
-  // code to run on server at startup
+
 });

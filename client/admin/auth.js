@@ -1,6 +1,8 @@
 import '../main.html';
 import { FlowRouter } from 'meteor/ostrio:flow-router-extra';
 import '../../collections/watchlist'
+import '../../collections/deskpicks'
+import '../../collections/actionlog'
 
 Template.base.events({
     'click .login': function () {
@@ -29,5 +31,12 @@ Template.main.helpers({
   mywatchlist: ()=> {
     let me = Meteor.userId();
     return Watchlist.find({owner: me, date: moment().format('YYYYMMDD')});
+  },
+  deskList: ()=> {
+    return DeskPicks.find({date: moment().format('YYYYMMDD')});
+  },
+  iliked: ()=> {
+    var t = "AHHH";
+    return ActionLog.find({ user: Meteor.userId(), type: "like", target: t}).count();
   }
 })
