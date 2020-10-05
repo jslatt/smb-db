@@ -1,4 +1,8 @@
+import { Mongo } from 'meteor/mongo';
+
+
 DeskPicks = new Mongo.Collection('deskPicks');
+
 
 
 // Collection permissoins

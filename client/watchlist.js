@@ -15,8 +15,16 @@ Template.main.events({
             DeskPicks.insert({
                 stock: uStock,
                 date: moment().format('YYYYMMDD'),
-                likes: 0,
+                likes: 1,
             })
+        }
+        else {
+            var p = DeskPicks.findOne({stock: uStock, date: moment().format('YYYYMMDD')});
+            var n = p.likes + 1;
+            var i = p._id;
+            DeskPicks.update(i,{ $set: {
+                likes: n,
+        }});
         }
      
         Watchlist.insert({
@@ -40,21 +48,6 @@ Template.main.events({
          Watchlist.remove(this._id);
         }
     },
-    'click .like': function() {
-        var l = DeskPicks.findOne(this._id).likes + 1;
-        var i = this._id;
-
-        DeskPicks.update(this._id,{ $set: {
-            likes: l,
-        }});
-        
-
-        ActionLog.insert({
-            user: Meteor.userId(),
-            type: "like",
-            target: i
-        })
-    }
 })
 Template.stockDetail.events({
     'click .saveRemarks': function() {
@@ -69,4 +62,31 @@ Template.stockDetail.helpers({
     name: ()=> {
         return Watchlist.find({_id: FlowRouter.getParam('_id')});
     },
+})
+Template.DeskDetail.helpers({
+    name: ()=> {
+        return DeskPicks.find({_id: FlowRouter.getParam('_id')});
+    },
+    comments: ()=> {
+        return ActionLog.find({target: FlowRouter.getParam('_id'), type: 'comment'},{sort: {createdAt: -1}});
+    }
+})
+
+Template.DeskDetail.events({
+    'submit  #comment': function(e) {
+        e.preventDefault();
+        
+        let c = $('#dp_comment').val();
+
+        ActionLog.insert({
+            user: Meteor.userId(),
+            username: Meteor.user().services.discord.username,
+            createdAt: new Date(),
+            daytime: moment().format('h:mm a'),
+            type: "comment",
+            target: FlowRouter.getParam('_id'),
+            payload: c
+        })
+        document.querySelector('#comment').reset();
+    }
 })

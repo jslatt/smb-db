@@ -7,7 +7,9 @@ import '../../collections/actionlog'
 Template.base.events({
     'click .login': function () {
         Meteor.loginWithDiscord({
-            requestPermissions: ['identify', 'email', 'guilds', 'guilds.join']
+            requestPermissions: ['identify', 'email', 'guilds']
+            //Only log in IF part of 626870035331285003
+            
           }, (error) => {
             if (error) {
               alert(error);
@@ -33,10 +35,6 @@ Template.main.helpers({
     return Watchlist.find({owner: me, date: moment().format('YYYYMMDD')});
   },
   deskList: ()=> {
-    return DeskPicks.find({date: moment().format('YYYYMMDD')});
+    return DeskPicks.find({date: moment().format('YYYYMMDD')}, {sort: {likes: -1}});
   },
-  iliked: ()=> {
-    var t = "AHHH";
-    return ActionLog.find({ user: Meteor.userId(), type: "like", target: t}).count();
-  }
 })

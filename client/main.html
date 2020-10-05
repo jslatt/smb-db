@@ -13,7 +13,7 @@
       <div class="uk-navbar-left">
   
           <ul class="uk-navbar-nav">
-              <li class="uk-active"><a href="#">SMBDB</a></li>
+              <li class="uk-active"><a href="/">SMBDB</a></li>
           </ul>
   
       </div>
@@ -108,7 +108,8 @@
            
             <ul class="uk-list">
               {{#each deskList}}
-              <li>{{#if iliked}}I LIKED{{else}}<i class="far fa-heart like"></i>{{/if}}&nbsp;{{likes}}&nbsp;{{stock}}</li>
+              {{TemplateVar.set "targetID" "{{_id}}"}}
+              <li><i class="far fa-heart like"></i>&nbsp;{{likes}}&nbsp;<a style="text-decoration: none; color: rgba(255,255,255,.7);" href="/d/{{_id}}" title="deskpick">{{stock}}</a></li>
               {{/each}}
           </ul>
             
@@ -126,7 +127,7 @@
             <h3>{{stock}}</h3>
             <div class="uk-margin">
             <div class="uk-flex uk-flex-wrap uk-flex-wrap-around">
-              <strong>ATR</strong> &nbsp;{{atr}}&nbsp; <strong>AVG VOL</strong> &nbsp;{{avgvol}}&nbsp; <strong>RVOL</strong> &nbsp;{{rvol}}&nbsp;  <strong>FLOAT</strong> &nbsp;{{float}}&nbsp; <strong>SHORT FLOAT</strong> &nbsp;{{sfloat}}&nbsp; <strong>INSTITUTIONAL</strong> &nbsp;{{instit}}
+              <span style="color: #666"><strong>ATR</strong> &nbsp;{{atr}}&nbsp; <strong>AVG VOL</strong> &nbsp;{{avgvol}}&nbsp; <strong>RVOL</strong> &nbsp;{{rvol}}&nbsp;  <strong>FLOAT</strong> &nbsp;{{float}}&nbsp; <strong>SHORT FLOAT</strong> &nbsp;{{sfloat}}&nbsp; <strong>INSTITUTIONAL</strong> &nbsp;{{instit}}</span>
               <hr/>
               <div class="uk-width-1-2">
                 REMARKS
@@ -142,6 +143,37 @@
                 DESK HYPE
               </div>
           </div>
+          </div>
+          </div>
+          {{/each}}
+          
+      </div>
+    
+</div></div>
+</template>
+<template name="DeskDetail">
+  <div class="uk-container uk-container-large" style="margin-top: 20px">
+    <div class="uk-child-width-expand@s" uk-grid>
+      <div>
+      {{#each name}}
+          <div class="uk-card uk-card-default uk-card-body uk-light" style="background-color: #1C1C1C;">
+            <a href="/" title="Back" style="text-decoration: none; color:#999"><i class="fas fa-arrow-left"></i>&nbsp;</a>
+            <h3><span style="color:#666"><i class="far fa-heart like"></i>&nbsp;{{likes}}</span>&nbsp;&nbsp;{{stock}}</h3>
+            <div class="uk-margin">
+              <form id="comment" autocomplete="off">
+                <input class="uk-input uk-form-width-medium uk-form-small" id="dp_comment" style="width:100%" type="text" placeholder="Thing thing is gonna RIPPPPPPPP!!!!! Let's gooo!!!" autofocus>
+            </form>
+            <hr/>
+            COMMENTS
+            <ul class="uk-list">
+              {{#each comments}}
+              <li><span style="background-color: #666; color: #fafafa" class="uk-badge ui-light">{{daytime}}</span>&nbsp;{{username}}:&nbsp;{{payload}}</li>
+              {{else}}
+              <li>No Comments ;-)</li>
+              {{/each}}
+            </ul>
+            
+
           </div>
           </div>
           {{/each}}
