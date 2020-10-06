@@ -4,17 +4,14 @@ import '../../collections/watchlist'
 import '../../collections/deskpicks'
 import '../../collections/actionlog'
 
+Template.base.onRendered(function() {
+  document.title = "SMBDB";
+})
+
+
 Template.base.events({
     'click .login': function () {
-        Meteor.loginWithDiscord({
-            requestPermissions: ['identify', 'email', 'guilds']
-            //Only log in IF part of 626870035331285003
-            
-          }, (error) => {
-            if (error) {
-              alert(error);
-            }
-          });    
+      Meteor.loginWithGoogle();
     },
     'click .logout': function() {
         Meteor.logout();
@@ -23,12 +20,12 @@ Template.base.events({
 
 Template.base.helpers({
   name: ()=> {
-    return Meteor.user().services.discord.username;
+    return Meteor.user().services.google.given_name;
   }
 })
 Template.main.helpers({
   name: ()=> {
-    return Meteor.user().services.discord.username;
+    return Meteor.user().services.google.given_name;
   },
   mywatchlist: ()=> {
     let me = Meteor.userId();

@@ -9,7 +9,7 @@ Template.main.events({
     'submit .addstock': function(e) {
         e.preventDefault();
         let me = Meteor.userId();
-        let uStock = $('#watchlist_stock').val();
+        let uStock = $('#watchlist_stock').val().toUpperCase();
 
         if (DeskPicks.find({ stock: uStock, date: moment().format('YYYYMMDD')}).count() == 0) {
             DeskPicks.insert({
@@ -45,16 +45,21 @@ Template.main.events({
     'click #delWatch': function() {
         var c = confirm("Are you sure you want to remove this from your watchlist?");
         if (c == 1) {
-         Watchlist.remove(this._id);
+        
+            Watchlist.remove(this._id);
+
         }
+
     },
 })
 Template.stockDetail.events({
     'click .saveRemarks': function() {
         let remarks = $('.remarks').val();
+        let setup = $('#setup').val();
 
         Watchlist.update(FlowRouter.getParam('_id'),{ $set: {
-            remarks: remarks
+            remarks: remarks,
+            setup: setup
           }});
     }
 })
@@ -62,6 +67,11 @@ Template.stockDetail.helpers({
     name: ()=> {
         return Watchlist.find({_id: FlowRouter.getParam('_id')});
     },
+    comments: ()=> {
+        var mstock = Watchlist.findOne({_id: FlowRouter.getParam('_id')}).stock;
+        var t = DeskPicks.findOne({stock: mstock, date: moment().format('YYYYMMDD')})._id;
+        return ActionLog.find({target: t, type: 'comment'},{sort: {createdAt: -1}});
+    }
 })
 Template.DeskDetail.helpers({
     name: ()=> {
@@ -80,7 +90,7 @@ Template.DeskDetail.events({
 
         ActionLog.insert({
             user: Meteor.userId(),
-            username: Meteor.user().services.discord.username,
+            username: Meteor.user().services.google.given_name,
             createdAt: new Date(),
             daytime: moment().format('h:mm a'),
             type: "comment",

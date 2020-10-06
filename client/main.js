@@ -5,9 +5,11 @@ import '../lib/routes';
 import './admin/auth';
 import '../collections/watchlist';
 import './watchlist'
+import '../collections/actionlog';
+import '../collections/deskpicks';
 
-/*Template.hello.onCreated(function helloOnCreated() {
-  // counter starts at 0
-  this.counter = new ReactiveVar(0);
-});
-*/
+
+Meteor.subscribe('DeskPicks');
+Meteor.subscribe('Watchlist');
+Meteor.subscribe('ActionLog');
+Meteor.subscribe('allUserData');

@@ -9,6 +9,10 @@ const Table = require('cli-table');
 const request = require('request');
 const stringSearcher = require('string-search');
 
+Meteor.publish("allUserData", function () {
+  return Meteor.users.find({}, {fields: {'services.google': 1}});
+});
+
 Meteor.publish('DeskPicks', function () {
   return DeskPicks.find({});
 });
@@ -17,6 +21,10 @@ Meteor.publish('Watchlist', function () {
 });
 Meteor.publish('ActionLog', function () {
   return ActionLog.find({});
+});
+
+Accounts.config({
+  restrictCreationByEmailDomain: 'smbcap.com'
 });
 
 Meteor.methods({
