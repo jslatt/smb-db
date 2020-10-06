@@ -45,9 +45,12 @@ Template.main.events({
     'click #delWatch': function() {
         var c = confirm("Are you sure you want to remove this from your watchlist?");
         if (c == 1) {
-        
+            var s = Watchlist.findOne({_id: this._id}).stock;
+            var d = DeskPicks.findOne({stock: s, date: moment().format('YYYYMMDD')});
+            if (d.likes <2) {
+                DeskPicks.remove(d._id);
+            }
             Watchlist.remove(this._id);
-
         }
 
     },
@@ -61,6 +64,26 @@ Template.stockDetail.events({
             remarks: remarks,
             setup: setup
           }});
+    },
+    'submit  #dcomment': function(e) {
+        e.preventDefault();
+        
+        let c = $('#dpComment').val();
+
+        var s = Watchlist.findOne({_id: FlowRouter.getParam('_id') }).stock;
+        var d = DeskPicks.findOne({stock: s, date: moment().format('YYYYMMDD')})._id;
+
+
+        ActionLog.insert({
+            user: Meteor.userId(),
+            username: Meteor.user().services.google.given_name,
+            createdAt: new Date(),
+            daytime: moment().format('h:mm a'),
+            type: "comment",
+            target: d,
+            payload: c
+        })
+        document.querySelector('#dcomment').reset();
     }
 })
 Template.stockDetail.helpers({
